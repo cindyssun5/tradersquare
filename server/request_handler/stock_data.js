@@ -2,11 +2,11 @@ const path = require('path');
 const restler = require('restler');
 const username = process.env.INTRINIO_USER;
 const password = process.env.INTRINIO_PASSWORD;
-const intrinio = require(path.resolve( __dirname, "intrinio"))(username, password);
+const intrinio = require(path.resolve(__dirname, "intrinio"))(username, password);
 const db = require('../../db/config.js');
 const query = require('../../db/queries.js');
 const callAll = require('./all_companies.js');
-// const companiesList = require('../../db/spCompanies.js');
+const companiesList = process.env.companies;
 
 const element = {};
 
@@ -15,8 +15,8 @@ const statementPromise = (ticker, statement, year, period) => {
     intrinio.statement(ticker, statement, year, period)
       .on('complete', (data, response) => {
         const results = data.data;
-        for(let i of results){
-          element[i.tag+year] = i.value;
+        for (let i of results) {
+          element[i.tag + year] = i.value;
         }
         resolve(element);
       })
@@ -28,11 +28,17 @@ const statementPromise = (ticker, statement, year, period) => {
 
 const dataPointPromise = (ticker) => {
   return new Promise((resolve, reject) => {
-    intrinio.data_point(ticker, "fiftytwo_week_high,fiftytwo_week_low,marketcap,pricetoearnings,basiceps,volume,average_daily_volume,open_price,close_price,change,beta")
+    intrinio.data_point(ticker, "ticker,name,52_week_high,52_week_low,marketcap,pricetoearnings,basiceps,volume,average_daily_volume,open_price,close_price,change,beta")
       .on('complete', (data, response) => {
         const results = data.data;
-        for(let i of results){
-          element[i.item] = i.value;
+        for (let i of results) {
+          if (i.item === "52_week_high") {
+            element["fiftytwo_week_high"] = i.value;
+          } else if (i.item === "52_week_low") {
+            element["fiftytwo_week_low"] = i.value;
+          } else {
+            element[i.item] = i.value;
+          }
         }
         resolve(element);
       })
@@ -47,7 +53,7 @@ const zscorePromise = (ticker) => {
     intrinio.data_point(ticker, "ticker,name,altmanzscore")
       .on('complete', (data, response) => {
         const results = data.data;
-        for(let i of results){
+        for (let i of results) {
           element[i.item] = i.value;
         }
         resolve(element);
@@ -79,35 +85,34 @@ let allCompsData = [];
 module.exports.stockData = (ticker, res) => {
 
   Promise.all([
-    statementPromise(ticker, "income_statement", "2014", "FY"),
-    statementPromise(ticker, "income_statement", "2015", "FY"),
-    statementPromise(ticker, "balance_sheet", "2014", "FY"),
-    statementPromise(ticker, "balance_sheet", "2015", "FY"),
-    statementPromise(ticker, "cash_flow_statement", "2014", "FY"),
-    statementPromise(ticker, "cash_flow_statement", "2015", "FY"),
-    statementPromise(ticker, "calculations", "2014", "FY"),
-    statementPromise(ticker, "calculations", "2015", "FY"),
-    dataPointPromise(ticker)
+      statementPromise(ticker, "income_statement", "2014", "FY"),
+      statementPromise(ticker, "income_statement", "2015", "FY"),
+      statementPromise(ticker, "balance_sheet", "2014", "FY"),
+      statementPromise(ticker, "balance_sheet", "2015", "FY"),
+      statementPromise(ticker, "cash_flow_statement", "2014", "FY"),
+      statementPromise(ticker, "cash_flow_statement", "2015", "FY"),
+      statementPromise(ticker, "calculations", "2014", "FY"),
+      statementPromise(ticker, "calculations", "2015", "FY"),
+      dataPointPromise(ticker)
     ])
-  .then((data) => {
+    .then((data) => {
 
-    //used to create/populate db schemase/tables
-    //DONT DELETE:
-    // query.insertRow(element);
-    //
+      //used to create/populate db schemase/tables
+      //DONT DELETE:
+      // query.insertRow(element);
+      //
 
-    // used to populate postgres table
-    // DON'T DELETE:
-    // allCompsData.push(element);
+      // used to populate postgres table
+      // DON'T DELETE:
+      allCompsData.push(element);
+      let parsedCompaniesList = JSON.parse(companiesList);
+      if (allCompsData.length === parsedCompaniesList.length) {
+        callAll.consolidate(allCompsData);
+      }
 
-    // if (allCompsData.length === companiesList.sp500.length) {
-    //   callAll.consolidate(allCompsData);
-    // }
-
-    console.log(element);
-    res.send(element);
-  })
-  .catch(err => {
-    throw err;
-  })
+      res.send(element);
+    })
+    .catch(err => {
+      throw err;
+    })
 };

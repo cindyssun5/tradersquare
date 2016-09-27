@@ -1,16 +1,16 @@
 const StockData = require('./stock_data');
-// const companiesObj = require('../../db/spCompanies.js');
-// const companiesList = companiesObj.sp500;
+const companiesList = process.env.companies;
 const queries = require('../../db/queries.js');
 
 let allCompsData = [];
 
 module.exports.tableColumns;
 let tableColumns = {};
+
 module.exports.getReq = (res) => {
-  // console.log(companiesList);
-  for (let i = 0; i < companiesList.length; i++) {
-    let ticker = companiesList[i];
+  let parsedCompaniesList = JSON.parse(companiesList);
+  for (let i = 0; i < parsedCompaniesList.length; i++) {
+    let ticker = parsedCompaniesList[i];
     StockData.stockData(ticker, res);
   }
 }

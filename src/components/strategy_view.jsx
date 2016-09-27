@@ -10,7 +10,7 @@ class StrategyView extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {selectValue: 'altmanzscore', items: 5, flag: false}
+    this.state = {selectValue: 'altmanzscore', items: 10, flag: false}
 
     this.handleChange = this.handleChange.bind(this);
     this.viewMore = this.viewMore.bind(this);
@@ -23,11 +23,11 @@ class StrategyView extends Component {
   }
 
   handleChange(event) {
-    this.setState({selectValue: event.target.value, items: 5})
+    this.setState({selectValue: event.target.value, items: 10})
   }
 
   viewMore(){
-    this.setState({items: this.state.items + 5})
+    this.setState({items: this.state.items + 10})
   }
 
   render(){
@@ -78,10 +78,11 @@ class StrategyView extends Component {
               <StratNav/>
             </div>
           </div>
-          <select
+          <div className="col-md-3">
+          <Select
             value={this.state.selectValue}
             onChange={this.handleChange}
-          >
+            >
             <option value="altmanzscore">Z-Score</option>
             <option value="assetturnover">Asset Turnover</option>
             <option value="grossmargin">Gross Margin</option>
@@ -94,7 +95,8 @@ class StrategyView extends Component {
             <option value="earningsyield">Earnings Yield</option>
             <option value="netincomegrowth">Net Income Growth</option>
             <option value="roe">Return on Equity</option>
-          </select>
+          </Select>
+          </div>
           <table className="tablr">
           <tr>
             <th>Ticker</th>
