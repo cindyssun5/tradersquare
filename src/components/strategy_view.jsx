@@ -6,6 +6,13 @@ import getStratData from '../actions/get_strat_data';
 import SearchBar from './search_bar';
 import StratNav from './strategy_nav';
 
+// import { DropdownButton } from 'react-bootstrap';
+// import Bootstrap from 'react-bootstrap';
+// import Select from 'react-bootstrap-select';
+
+// const React.Bootstrap = Bootstrap;
+// const React.Bootstrap.Select = Select;
+
 class StrategyView extends Component {
   constructor(props) {
     super(props);
@@ -79,7 +86,7 @@ class StrategyView extends Component {
             </div>
           </div>
           <div className="col-md-3">
-          <Select
+          <select
             value={this.state.selectValue}
             onChange={this.handleChange}
             >
@@ -95,7 +102,7 @@ class StrategyView extends Component {
             <option value="earningsyield">Earnings Yield</option>
             <option value="netincomegrowth">Net Income Growth</option>
             <option value="roe">Return on Equity</option>
-          </Select>
+          </select>
           </div>
           <table className="tablr">
           <tr>
