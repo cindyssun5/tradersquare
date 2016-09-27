@@ -74,7 +74,7 @@ module.exports.stockData = (ticker, res, dbStuff) => {
     //DONT DELETE:
     // query.insertRow(flatData);
     //
-
+    //
     // used to populate postgres table
     // DON'T DELETE:
     if (dbStuff === 'getReq') {
