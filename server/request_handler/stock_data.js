@@ -2,21 +2,20 @@ const path = require('path');
 const restler = require('restler');
 const username = process.env.INTRINIO_USER;
 const password = process.env.INTRINIO_PASSWORD;
-const intrinio = require(path.resolve( __dirname, "intrinio"))(username, password);
+const intrinio = require(path.resolve(__dirname, "intrinio"))(username, password);
 const db = require('../../db/config.js');
 const query = require('../../db/queries.js');
 const callAll = require('./all_companies.js');
 const companiesList = process.env.companies;
 const apiReq = require('./api_req.js');
 
-
 const statementPromise = (ticker, statement, year, period, type) => {
   return new Promise((resolve, reject) => {
     intrinio.statement(ticker, statement, year, period)
       .on('complete', (data, response) => {
         const results = data.data;
-        for(let i of results){
-          element[i.tag+year] = i.value;
+        for (let i of results) {
+          element[i.tag + year] = i.value;
         }
         resolve(element);
       })
@@ -28,12 +27,17 @@ const statementPromise = (ticker, statement, year, period, type) => {
 
 const dataPointPromise = (type, ticker) => {
   return new Promise((resolve, reject) => {
-    intrinio[type](ticker, "fiftytwo_week_high,fiftytwo_week_low,marketcap,pricetoearnings,basiceps,volume,average_daily_volume,open_price,close_price,change,beta")
+    intrinio.data_point(ticker, "ticker,name,52_week_high,52_week_low,marketcap,pricetoearnings,basiceps,volume,average_daily_volume,open_price,close_price,change,beta")
       .on('complete', (data, response) => {
         const results = data.data;
-        const element = {};
-        for(let i of results){
-          element[i.item] = i.value;
+        for (let i of results) {
+          if (i.item === "52_week_high") {
+            element["fiftytwo_week_high"] = i.value;
+          } else if (i.item === "52_week_low") {
+            element["fiftytwo_week_low"] = i.value;
+          } else {
+            element[i.item] = i.value;
+          }
         }
         resolve(element);
       })

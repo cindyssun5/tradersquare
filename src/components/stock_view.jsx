@@ -6,14 +6,12 @@ import StratNav from './strategy_nav';
 
 
 class StockView extends Component {
-    // constructor(props) {
-    //   this.state
-    // }
-
   render() {
     console.log('mapStateToProps rerender: ', this.props.stockData);
     let stockData = this.props.stockData.map((val) => {
-      return (<div key={val}><span>{val[0]}</span> : <span>{val[1]}</span></div>);
+      if (val) {
+        return (<div key={val}><span>{val[0]}</span> : <span>{val[1]}</span></div>);
+      }
     })
 
     return (

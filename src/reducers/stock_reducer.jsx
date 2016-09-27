@@ -22,7 +22,7 @@ export default function(state = INITIAL_STATE, action) {
       return stockState;
     default:
       return [
-        'hello'
+        ''
       ];
   }
 }
