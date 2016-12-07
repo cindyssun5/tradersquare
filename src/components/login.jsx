@@ -110,7 +110,7 @@ class LoginNav extends Component {
             <Modal
               isOpen={this.state.modalOpen}
               onRequestClose={this.openModal}
-              style={modalStyles}
+              className = "page-content"
             >
               <LoginPopup />
             </Modal>

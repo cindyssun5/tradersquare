@@ -55,6 +55,7 @@
     "bookshelf": "0.10.1",
     "cron": "^1.1.1",
     "d3": "3.5.17",
+    "dialog-polyfill": "^0.4.5",
     "dotenv": "2.0.0",
     "eslint": "3.5.0",
     "eslint-config-airbnb": "11.1.0",
