@@ -61,6 +61,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static(path.join(__dirname, '../public')));
+app.use('/dialog-polyfill', express.static(path.join(__dirname, '../node_modules/dialog-polyfill')));
 // uncomment after we figure out what the client folder will be
 
 // var intrinio = require(path.resolve( __dirname, "intrinio"))(username, password)

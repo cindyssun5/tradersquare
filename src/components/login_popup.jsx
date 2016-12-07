@@ -49,7 +49,8 @@ class LoginPopup extends Component {
     }
 
     return (
-            <div>
+      <div>
+            <main className = "page-content">
               <h2> LOGIN </h2>
               <hr />
               <p> In order to see or add to your Watchlist, you must first signup or login below. </p>
@@ -57,6 +58,7 @@ class LoginPopup extends Component {
               <center>
                 <button className="" onClick={this.attemptGoogleLogin}> <h3  style={buttonTextCenter}>Login with Google+</h3></button>
               </center>
+            </main>
             </div>
             )
   }

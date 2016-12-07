@@ -2,11 +2,8 @@
 <html>
   <head>
     <title>TraderSquare</title>
- <!--    <link href="https://fonts.googleapis.com/css?family=Cinzel|Cookie|Josefin+Sans|Muli|Cabin+Sketch|Buda:300|Alegreya+Sans+SC:300|Lobster+Two" rel="stylesheet" />
-
-
-    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" /> -->
-    <script src="dialog-polyfill.js"></script>
+    <script src="/dialog-polyfill/dialog-polyfill.js"></script>
+    <link rel="stylesheet" href="/dialog-polyfill/dialog-polyfill.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.cyan-deep_purple.min.css">
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
@@ -31,10 +28,50 @@
   </head>
   <body>
   <!-- <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>  -->
-    <div class="container"></div>
+   <button id="show-dialog" type="button" class="mdl-button">Show Dialog</button>
+  <dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Allow data collection?</h4>
+    <div class="mdl-dialog__content">
+      <p>
+        Allowing us to collect data will let us get you the information you want faster.
+      </p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button">Agree</button>
+      <button type="button" class="mdl-button close">Disagree</button>
+    </div>
+  </dialog>
+
+  <div class="container"></div>
+
+  <script>
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showDialogButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+  </script>
 
   </body>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>  -->
-
+   <script>
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showDialogButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+  </script>
   <script src="./bundle.js"></script>
 </html>
